@@ -21,17 +21,19 @@
     (lander-at lander2 wp1)
     (lander-slot-free lander2)
 
-    ;; Rover 2 starts undeployed
-    (not (deployed rover2))
+    ;; rover memories start empty
+    (empty-mem rover1)
+
+    ;; Physical samples on the ground at WP 
+
+    (sample-at sample1 wp5)
+    (sample-at sample2 wp1)
 
     ;; Map for Mission 2
-    (connected wp1 wp2)
-    (connected wp2 wp1)
+    (connected wp1 wp2) (connected wp2 wp1)
     (connected wp2 wp3)
-    (connected wp2 wp4)
-    (connected wp3 wp5)
-    (connected wp4 wp2)
-    (connected wp5 wp3)
+    (connected wp2 wp4) (connected wp4 wp2)
+    (connected wp3 wp5) (connected wp5 wp3)
     (connected wp5 wp6)
     (connected wp6 wp4)
     )
@@ -42,7 +44,8 @@
             (scan-saved wp4)
             (image-saved wp2)
             (scan-saved wp6)
-            (lander-has-sample)
+            (exists (?s1 - sample) (lander-has-sample lander1 ?s1))
+            (exists (?s2 - sample) (lander-has-sample lander2 ?s2))
         )
     )
 )

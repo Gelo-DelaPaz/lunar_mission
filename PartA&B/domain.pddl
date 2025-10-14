@@ -1,5 +1,5 @@
 (define (domain lunar)
-    (:requirements :strips :typing :negative-preconditions)
+    (:requirements :strips :typing :negative-preconditions :conditional-effects)
 
     ; -------------------------------
     ; Types
@@ -88,24 +88,32 @@
                     (not (carrying-scan ?r ?x)))
     )
 
-    ; pick up a physical sample (occupies the single memory/carry slot)
     (:action pick-sample
-        :parameters (?r - rover ?s - sample ?x - location)
-        :precondition (and (at ?r ?x) (sample-at ?s ?x) (empty-mem ?r))
-        :effect (and (carrying-sample ?r ?s)
-                    (not (sample-at ?s ?x))
-                    (not (empty-mem ?r)))
+        :parameters (?r - rover ?x - location)
+        :precondition (and (at ?r ?x)
+                        (empty-mem ?r)
+                        (exists (?s - sample) (sample-at ?s ?x)))
+        :effect (and (not (empty-mem ?r))
+                    (forall (?s - sample)
+                        (when (sample-at ?s ?x)
+                            (and (not (sample-at ?s ?x))
+                                (carrying-sample ?r ?s)))))
     )
-
     ; store the sample at the lander (lander capacity = 1)
     (:action store-sample
-        :parameters (?r - rover ?ld - lander ?s - sample ?x - location)
-        :precondition (and (at ?r ?x) (lander-at ?ld ?x)
-                        (carrying-sample ?r ?s)
-                        (lander-slot-free ?ld))
-        :effect (and (lander-has-sample ?ld ?s)
-                    (empty-mem ?r)
-                    (not (carrying-sample ?r ?s))
-                    (not (lander-slot-free ?ld)))
+        :parameters (?r - rover ?ld - lander ?x - location)
+        :precondition (and (at ?r ?x)
+                        (lander-at ?ld ?x)
+                        (lander-slot-free ?ld)
+                        (exists (?s - sample) (carrying-sample ?r ?s))) ; rover has something
+        :effect (and
+            (empty-mem ?r)                
+            (not (lander-slot-free ?ld))
+            (forall (?s - sample)
+                (when (carrying-sample ?r ?s)
+                    (and (not (carrying-sample ?r ?s))
+                        (lander-has-sample ?ld ?s)))))
+
+
     )
 )
