@@ -1,4 +1,4 @@
-(define (problem lunar-mission)
+(define (problem lunar-mission-1)
     (:domain lunar)
 
     (:objects

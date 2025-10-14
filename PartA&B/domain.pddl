@@ -1,38 +1,48 @@
 (define (domain lunar)
     (:requirements :strips :typing :negative-preconditions)
 
-    (:types rover lander location sample)
+    ; -------------------------------
+    ; Types
+    ; -------------------------------
+    (:types 
+        rover
+        lander
+        location
+        sample
+    )
 
-
+    ; -------------------------------
+    ; Predicates
+    ; -------------------------------
+    
     (:predicates
-    ; topology / placement
-    (at ?r - rover ?l - location)
-    (connected ?a ?b - location)
-    (lander-at ?ld - lander ?l - location)
-    (deployed ?r - rover)
+        ; topology / placement
+        (at ?r - rover ?l - location)
+        (connected ?a ?b - location)
+        (lander-at ?ld - lander ?l - location)
+        (deployed ?r - rover)
 
-    ; rover memory: can hold exactly one thing at a time
-    (empty-mem ?r - rover)
-    (carrying-image ?r - rover ?l - location)
-    (carrying-scan  ?r - rover ?l - location)
-    (carrying-sample ?r - rover ?s - sample)
+        ; rover memory: can hold exactly one thing at a time
+        (empty-mem ?r - rover)
+        (carrying-image ?r - rover ?l - location)
+        (carrying-scan  ?r - rover ?l - location)
+        (carrying-sample ?r - rover ?s - sample)
 
-    ; where samples exist and what lander stores
-    (sample-at ?s - sample ?l - location)
-    (lander-slot-free ?ld - lander)
-    (lander-has-sample ?ld - lander ?s - sample)
+        ; where samples exist and what lander stores
+        (sample-at ?s - sample ?l - location)
+        (lander-slot-free ?ld - lander)
+        (lander-has-sample ?ld - lander ?s - sample)
 
-    ; mission progress flags after transmission
-    (image-saved ?l - location)
-    (scan-saved  ?l - location)
-    )
-    (:action action_name
-        :parameters ()
-        :precondition (and)
-        :effect (and)
+        ; mission progress flags after transmission
+        (image-saved ?l - location)
+        (scan-saved  ?l - location)
     )
 
-     ; deploy the rover at the lander’s location (initially undeployed)
+    ; -------------------------------
+    ; Actions
+    ; -------------------------------
+    
+    ; deploy the rover at the lander’s location (initially undeployed)
     (:action deploy
         :parameters (?r - rover ?ld - lander ?x - location)
         :precondition (and (lander-at ?ld ?x) (not (deployed ?r)))
