@@ -9,43 +9,46 @@
     )
 
     (:init
-    ;; Lander 1 sits at WP2
-    (lander-at lander1 wp2)
-    (lander-slot-free lander1)
+        ;; Lander 1 sits at WP2
+        (lander_at lander1 wp2)
+        (lander_slot_free lander1)
 
-    ;; Rover 1 starts already deployed at WP2
-    (deployed rover1)
-    (at rover1 wp2)
+        ;; Rover 1 starts already deployed at WP2
+        (deployed rover1)
+        (rover_at rover1 wp2)
+        (assigned rover1 lander1)
 
-    ;; Lander 2 sits at WP1
-    (lander-at lander2 wp1)
-    (lander-slot-free lander2)
+        ;; Lander 2 sits at WP1
+        (lander_at lander2 wp5)
+        (lander_slot_free lander2)
 
-    ;; rover memories start empty
-    (empty-mem rover1)
+        ;; rover memories start empty
+        (empty_mem rover1)
 
-    ;; Physical samples on the ground at WP 
+        ;; Physical samples on the ground at WP 
 
-    (sample-at sample1 wp5)
-    (sample-at sample2 wp1)
+        (sample_at sample1 wp5)
+        (sample_at sample2 wp1)
 
-    ;; Map for Mission 2
-    (connected wp1 wp2) (connected wp2 wp1)
-    (connected wp2 wp3)
-    (connected wp2 wp4) (connected wp4 wp2)
-    (connected wp3 wp5) (connected wp5 wp3)
-    (connected wp5 wp6)
-    (connected wp6 wp4)
+        ;; Map for Mission 2
+        (connected wp1 wp2) (connected wp2 wp1)
+        (connected wp2 wp3)
+        (connected wp2 wp4) (connected wp4 wp2)
+        (connected wp3 wp5) (connected wp5 wp3)
+        (connected wp5 wp6)
+        (connected wp6 wp4)
     )
 
     (:goal
         (and
-            (image-saved wp3)
-            (scan-saved wp4)
-            (image-saved wp2)
-            (scan-saved wp6)
-            (exists (?s1 - sample) (lander-has-sample lander1 ?s1))
-            (exists (?s2 - sample) (lander-has-sample lander2 ?s2))
+            (image_saved wp3)
+            (scan_saved wp4)
+            (image_saved wp2)
+            (scan_saved wp6)
+            (rover_at rover1 wp2)
+            (rover_at rover2 wp5)
+            (exists (?s1 - sample) (lander_has_sample lander1 ?s1))
+            (exists (?s2 - sample) (lander_has_sample lander2 ?s2))
         )
     )
 )
