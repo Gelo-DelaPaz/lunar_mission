@@ -24,16 +24,14 @@
         (lander_slot_free lander2)
         (not (deployed rover2))
 
+        ;; Astronauts' initial locations
         (in_docking_bay alice lander1)
-        (docking_bay_occupied lander1)
-
         (in_control_room bob lander2)
-        (control_room_occupied lander2)
 
-        ;; rover memories start empty
-        (empty_mem rover1)
+        ;; Rover 1 memory starts empty
+        (empty_memory rover1)
 
-        ;; Physical samples on the ground at WP 
+        ;; Physical samples location
         (sample_at sample1 wp5)
         (sample_at sample2 wp1)
 
@@ -54,8 +52,8 @@
             (scan_saved wp6)
             (rover_at rover1 wp2)
             (rover_at rover2 wp5)
-            (exists (?s1 - sample) (lander_has_sample lander1 ?s1))
-            (exists (?s2 - sample) (lander_has_sample lander2 ?s2))
+            (exists (?s - sample) (lander_has_sample lander1 ?s))
+            (exists (?s - sample) (lander_has_sample lander2 ?s))
         )
     )
 )

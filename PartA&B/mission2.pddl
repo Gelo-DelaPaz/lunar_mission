@@ -22,11 +22,10 @@
         (lander_at lander2 wp5)
         (lander_slot_free lander2)
 
-        ;; rover memories start empty
-        (empty_mem rover1)
+        ;; Rover 1 memory start empty
+        (empty_memory rover1)
 
-        ;; Physical samples on the ground at WP 
-
+        ;; Physical samples location
         (sample_at sample1 wp5)
         (sample_at sample2 wp1)
 
@@ -47,8 +46,8 @@
             (scan_saved wp6)
             (rover_at rover1 wp2)
             (rover_at rover2 wp5)
-            (exists (?s1 - sample) (lander_has_sample lander1 ?s1))
-            (exists (?s2 - sample) (lander_has_sample lander2 ?s2))
+            (exists (?s - sample) (lander_has_sample lander1 ?s))
+            (exists (?s - sample) (lander_has_sample lander2 ?s))
         )
     )
 )

@@ -20,7 +20,7 @@
         (connected ?a ?b - location)
         (lander_at ?ld - lander ?l - location)
         (deployed ?r - rover)
-        (empty_mem ?r - rover)
+        (empty_memory ?r - rover)
         (carrying_image ?r - rover ?l - location)
         (carrying_scan  ?r - rover ?l - location)
         (carrying_sample ?r - rover ?s - sample)
@@ -46,7 +46,7 @@
         :effect (and
                     (deployed ?r)
                     (rover_at ?r ?x)
-                    (empty_mem ?r)
+                    (empty_memory ?r)
                     (assigned ?r ?ld))
     )
 
@@ -67,9 +67,10 @@
         :parameters (?r - rover ?l - location)
         :precondition (and 
                         (rover_at ?r ?l) 
-                        (empty_mem ?r))
+                        (empty_memory ?r)
+                        (not (image_saved ?l)))
         :effect (and 
-                    (not (empty_mem ?r)) 
+                    (not (empty_memory ?r)) 
                     (carrying_image ?r ?l))
     )
 
@@ -78,9 +79,10 @@
         :parameters (?r - rover ?l - location)
         :precondition (and 
                         (rover_at ?r ?l) 
-                        (empty_mem ?r))
+                        (empty_memory ?r)
+                        (not (scan_saved ?l)))
         :effect (and 
-                    (not (empty_mem ?r)) 
+                    (not (empty_memory ?r)) 
                     (carrying_scan ?r ?l))
     )
     
@@ -89,7 +91,7 @@
         :parameters (?r - rover ?ld - lander ?l - location)
         :precondition (and (carrying_image ?r ?l) (assigned ?r ?ld))
         :effect (and (image_saved ?l)
-                    (empty_mem ?r)
+                    (empty_memory ?r)
                     (not (carrying_image ?r ?l)))
     )
 
@@ -98,23 +100,21 @@
         :parameters (?r - rover ?ld - lander ?l - location)
         :precondition (and (carrying_scan ?r ?l) (assigned ?r ?ld))
         :effect (and (scan_saved ?l)
-                    (empty_mem ?r)
+                    (empty_memory ?r)
                     (not (carrying_scan ?r ?l)))
     )
     
     ; pick up the sample from the ground
     (:action pick_sample
-        :parameters (?r - rover ?l - location)
-        :precondition (and (rover_at ?r ?l)
-                        (empty_mem ?r)
-                        (exists (?s - sample) (sample_at ?s ?l)))
-        :effect (and (not (empty_mem ?r))
-                    (forall (?s - sample)
-                        (when (sample_at ?s ?l)
-                            (and (not (sample_at ?s ?l))
-                                (carrying_sample ?r ?s)))))
+        :parameters (?r - rover ?s - sample ?l - location)
+        :precondition (and  (rover_at ?r ?l)
+                            (sample_at ?s ?l)
+                            (not (carrying_sample ?r ?s)))
+        :effect (and (carrying_sample ?r ?s)
+                    (not (sample_at ?s ?l)))
     )
-    ; store the sample at the lander (lander capacity = 1)
+    
+    ; store the sample at the lander
     (:action store_sample
         :parameters (?r - rover ?ld - lander ?s - sample ?l - location)
         :precondition (and (rover_at ?r ?l)
@@ -122,13 +122,9 @@
                         (lander_slot_free ?ld)
                         (carrying_sample ?r ?s)
                         (assigned ?r ?ld))
-                        
-        :effect (and
-            (empty_mem ?r)                
+        :effect (and               
             (not (lander_slot_free ?ld))
             (not (carrying_sample ?r ?s))
             (lander_has_sample ?ld ?s))
-
-
     )
 )
