@@ -29,6 +29,8 @@
         (lander_has_sample ?ld - lander ?s - sample)
         (image_saved ?l - location)
         (scan_saved  ?l - location)
+        (need_image ?l - location)
+        (need_scan ?l - location)
         (assigned ?r - rover ?ld - lander)
     )
 
@@ -68,7 +70,8 @@
         :precondition (and 
                         (rover_at ?r ?l) 
                         (empty_memory ?r)
-                        (not (image_saved ?l)))
+                        (not (image_saved ?l))
+                        (need_image ?l))
         :effect (and 
                     (not (empty_memory ?r)) 
                     (carrying_image ?r ?l))
@@ -80,7 +83,8 @@
         :precondition (and 
                         (rover_at ?r ?l) 
                         (empty_memory ?r)
-                        (not (scan_saved ?l)))
+                        (not (scan_saved ?l))
+                        (need_scan ?l))
         :effect (and 
                     (not (empty_memory ?r)) 
                     (carrying_scan ?r ?l))

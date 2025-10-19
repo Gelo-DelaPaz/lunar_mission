@@ -19,13 +19,15 @@
         (empty_memory ?r - rover)
         (carrying_image ?r - rover ?l - location)
         (carrying_scan  ?r - rover ?l - location)
-        (assigned ?r - rover ?ld - lander)
         (carrying_sample ?r - rover ?s - sample)
         (sample_at ?s - sample ?l - location)
         (lander_slot_free ?ld - lander)
         (lander_has_sample ?ld - lander ?s - sample)
         (image_saved ?l - location)
         (scan_saved  ?l - location)
+        (need_image ?l - location)
+        (need_scan ?l - location)
+        (assigned ?r - rover ?ld - lander)
     )
 
      ; -------------------------------
@@ -58,56 +60,62 @@
 
     ; take an image at a specific location
     (:action take_image
-        :parameters (?r - rover ?x - location)
+        :parameters (?r - rover ?l - location)
         :precondition (and 
-                        (rover_at ?r ?x)
-                        (empty_memory ?r))
+                        (rover_at ?r ?l)
+                        (empty_memory ?r)
+                        (not (image_saved ?l))
+                        (need_image ?l))
         :effect (and
                     (not (empty_memory ?r))
-                    (carrying_image ?r ?x))
+                    (carrying_image ?r ?l))
     )
 
     ; take a subsurface scan
     (:action take_scan
-        :parameters (?r - rover ?x - location)
-        :precondition (and (rover_at ?r ?x) (empty_memory ?r))
-        :effect (and (not (empty_memory ?r)) (carrying_scan ?r ?x))
+        :parameters (?r - rover ?l - location)
+        :precondition (and
+                        (rover_at ?r ?l)
+                        (empty_memory ?r)
+                        (not (scan_saved ?l))
+                        (need_scan ?l))
+        :effect (and (not (empty_memory ?r)) (carrying_scan ?r ?l))
     )
 
     ; transmit the image to the lander
     (:action transmit_image
-        :parameters (?r - rover ?a - astronaut ?ld - lander ?x - location)
+        :parameters (?r - rover ?a - astronaut ?ld - lander ?l - location)
         :precondition (and 
-                        (carrying_image ?r ?x)
+                        (carrying_image ?r ?l)
                         (in_control_room ?a ?ld)
                         (assigned ?r ?ld))
-        :effect (and (image_saved ?x)
+        :effect (and (image_saved ?l)
                     (empty_memory ?r)
-                    (not (carrying_image ?r ?x)))
+                    (not (carrying_image ?r ?l)))
     )
 
     ; transmit the scan to the lander (wireless), freeing memory
     (:action transmit_scan
-        :parameters (?r - rover ?a - astronaut ?ld - lander ?x - location)
+        :parameters (?r - rover ?a - astronaut ?ld - lander ?l - location)
         :precondition (and
-                        (carrying_scan ?r ?x)
+                        (carrying_scan ?r ?l)
                         (in_control_room ?a ?ld)
                         (assigned ?r ?ld))
-        :effect (and (scan_saved ?x)
+        :effect (and (scan_saved ?l)
                     (empty_memory ?r)
-                    (not (carrying_scan ?r ?x)))
+                    (not (carrying_scan ?r ?l)))
     )
 
     ; pick up a sample from the ground
     (:action pick_sample
-        :parameters (?r - rover ?s - sample ?x - location)
+        :parameters (?r - rover ?s - sample ?l - location)
         :precondition (and 
-                        (rover_at ?r ?x)
-                        (sample_at ?s ?x)
+                        (rover_at ?r ?l)
+                        (sample_at ?s ?l)
                         (not (carrying_sample ?r ?s)))
         :effect (and
                     (carrying_sample ?r ?s)
-                    (not (sample_at ?s ?x)))
+                    (not (sample_at ?s ?l)))
     )
 
     ; store the sample at the lander

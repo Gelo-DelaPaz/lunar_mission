@@ -29,6 +29,12 @@
         (sample_at sample1 wp5)
         (sample_at sample2 wp1)
 
+        ;; Images/scans needed
+        (need_image wp3)
+        (need_image wp2)
+        (need_scan wp4)
+        (need_scan wp6)
+
         ;; Map for Mission 2
         (connected wp1 wp2) (connected wp2 wp1)
         (connected wp2 wp3)
