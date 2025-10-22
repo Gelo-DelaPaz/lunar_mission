@@ -21,6 +21,7 @@
         ;; Lander 2 sits at WP1
         (lander_at lander2 wp5)
         (lander_slot_free lander2)
+        (undeployed rover2)
 
         ;; Rover 1 memory start empty
         (empty_memory rover1)
@@ -34,6 +35,16 @@
         (need_image wp2)
         (need_scan wp4)
         (need_scan wp6)
+
+        (image_not_saved wp2)
+        (image_not_saved wp3)       
+        (scan_not_saved wp4)
+        (scan_not_saved wp6)
+        
+        (not_carrying_sample rover1 sample1)
+        (not_carrying_sample rover1 sample2)
+        (not_carrying_sample rover2 sample1)
+        (not_carrying_sample rover2 sample2)
 
         ;; Map for Mission 2
         (connected wp1 wp2) (connected wp2 wp1)
