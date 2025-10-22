@@ -16,6 +16,10 @@
       ;; Physical sample on the ground at WP1
       (sample_at sample1 wp1)
 
+      ;; Images/scans needed
+      (need_image wp5)
+      (need_scan wp3)
+
       ;; Mission Map
       (connected wp1 wp2)
       (connected wp2 wp3)
