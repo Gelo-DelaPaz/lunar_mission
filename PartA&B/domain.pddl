@@ -1,5 +1,5 @@
 (define (domain lunar)
-    (:requirements :strips :typing :conditional-effects)
+    (:requirements :strips :typing)
 
     ; -------------------------------
     ; Types
@@ -102,7 +102,9 @@
     ; transmit the image to the lander
     (:action transmit_image
         :parameters (?r - rover ?ld - lander ?l - location)
-        :precondition (and (carrying_image ?r ?l) (assigned ?r ?ld))
+        :precondition (and 
+                        (carrying_image ?r ?l)
+                        (assigned ?r ?ld))
         :effect (and (image_saved ?l)
                     (empty_memory ?r)
                     (not (carrying_image ?r ?l))
@@ -113,7 +115,9 @@
     ; transmit the scan to the lander
     (:action transmit_scan
         :parameters (?r - rover ?ld - lander ?l - location)
-        :precondition (and (carrying_scan ?r ?l) (assigned ?r ?ld))
+        :precondition (and 
+                        (carrying_scan ?r ?l)
+                        (assigned ?r ?ld))
         :effect (and (scan_saved ?l)
                     (empty_memory ?r)
                     (not (carrying_scan ?r ?l))
@@ -124,9 +128,10 @@
     ; pick up the sample from the ground
     (:action pick_sample
         :parameters (?r - rover ?s - sample ?l - location)
-        :precondition (and  (rover_at ?r ?l)
-                            (sample_at ?s ?l)
-                            (not_carrying_sample ?r ?s)) 
+        :precondition (and 
+                        (rover_at ?r ?l)
+                        (sample_at ?s ?l)
+                        (not_carrying_sample ?r ?s)) 
         :effect (and (carrying_sample ?r ?s)
                     (not (sample_at ?s ?l))
                     (not (not_carrying_sample ?r ?s)) 
@@ -136,7 +141,8 @@
     ; store the sample at the lander
     (:action store_sample
         :parameters (?r - rover ?ld - lander ?s - sample ?l - location)
-        :precondition (and (rover_at ?r ?l)
+        :precondition (and 
+                        (rover_at ?r ?l)
                         (lander_at ?ld ?l)
                         (lander_slot_free ?ld)
                         (carrying_sample ?r ?s)

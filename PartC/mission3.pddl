@@ -10,46 +10,42 @@
     )
 
     (:init
-        ;; landers & rovers
+        ;; Lander & rover location and state
         (lander_at lander1 wp2)
         (lander_slot_free lander1)
         (deployed rover1)
         (rover_at rover1 wp2)
         (assigned rover1 lander1)
-
+        (empty_memory rover1)
         (lander_at lander2 wp5)
         (lander_slot_free lander2)
         (undeployed rover2)
 
-        ;; astronauts
+        ;; Astronaut locations
         (in_docking_bay alice lander1)
         (in_control_room bob lander2)
 
-        ;; memory
-        (empty_memory rover1)
-
-        ;; samples
+        ;; Sample locations
         (sample_at sample1 wp5)
         (sample_at sample2 wp1)
 
-        ;; needs
+        ;; Image/scan needed
         (need_image wp3)
         (need_image wp2)
         (need_scan wp4)
         (need_scan wp6)
 
-        ;; complements
+        ;; Complement predicates
         (image_not_saved wp2)
         (image_not_saved wp3)
         (scan_not_saved wp4)
         (scan_not_saved wp6)
-
         (not_carrying_sample rover1 sample1)
         (not_carrying_sample rover1 sample2)    
         (not_carrying_sample rover2 sample1)
         (not_carrying_sample rover2 sample2)
 
-        ;; map
+        ;; Map
         (connected wp1 wp2) (connected wp2 wp1)
         (connected wp2 wp3)
         (connected wp2 wp4) (connected wp4 wp2)

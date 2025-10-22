@@ -1,6 +1,9 @@
 (define (domain lunar-extended)
-    (:requirements :strips :typing :conditional-effects)
+    (:requirements :strips :typing)
 
+    ; -------------------------------
+    ; Types
+    ; -------------------------------
     (:types
         rover
         lander
@@ -8,7 +11,10 @@
         sample
         astronaut
     )
-
+    ; -------------------------------
+    ; Predicates
+    ; -------------------------------
+    
     (:predicates
         (rover_at ?r - rover ?l - location)
         (connected ?a ?b - location)
@@ -40,10 +46,12 @@
 
     (:action deploy
         :parameters (?r - rover ?a - astronaut ?ld - lander ?l - location)
-        :precondition (and (lander_at ?ld ?l)
-                            (undeployed ?r)
-                            (in_docking_bay ?a ?ld))
-        :effect (and (deployed ?r)
+        :precondition (and 
+                        (lander_at ?ld ?l)
+                        (undeployed ?r)
+                        (in_docking_bay ?a ?ld))
+        :effect (and 
+                    (deployed ?r)
                     (rover_at ?r ?l)
                     (empty_memory ?r)
                     (assigned ?r ?ld)
@@ -83,9 +91,10 @@
                         (empty_memory ?r)
                         (scan_not_saved ?l)
                         (need_scan ?l))
-        :effect (and (not (empty_memory ?r))
-                     (carrying_scan ?r ?l)
-                     (not (scan_not_saved ?l))
+        :effect (and
+                    (not (empty_memory ?r))
+                    (carrying_scan ?r ?l)
+                    (not (scan_not_saved ?l))
         )
     )
 
@@ -95,7 +104,8 @@
                         (carrying_image ?r ?l)
                         (in_control_room ?a ?ld)
                         (assigned ?r ?ld))
-        :effect (and (image_saved ?l)
+        :effect (and 
+                    (image_saved ?l)
                     (empty_memory ?r)
                     (not (carrying_image ?r ?l))
                     (not (image_not_saved ?l))
@@ -108,7 +118,8 @@
                         (carrying_scan ?r ?l)
                         (in_control_room ?a ?ld)
                         (assigned ?r ?ld))
-        :effect (and (scan_saved ?l)
+        :effect (and 
+                    (scan_saved ?l)
                     (empty_memory ?r)
                     (not (carrying_scan ?r ?l))
                     (not (scan_not_saved ?l))
@@ -137,7 +148,8 @@
                         (lander_slot_free ?ld)
                         (in_docking_bay ?a ?ld)
                         (assigned ?r ?ld))
-        :effect (and (lander_has_sample ?ld ?s)
+        :effect (and
+                    (lander_has_sample ?ld ?s)
                     (not (carrying_sample ?r ?s))
                     (not (lander_slot_free ?ld))
                     (not_carrying_sample ?r ?s)
